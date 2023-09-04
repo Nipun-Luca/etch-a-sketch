@@ -143,7 +143,7 @@ function resetColors() {
 }
 
 
-//Darken and lighten buttons
+// Darken and lighten buttons
 const darkenButton = document.getElementById("darken");
 const lightenButton = document.getElementById("lighten");
 let isDarkenToggled = false;
@@ -152,13 +152,17 @@ let isLightenToggled = false;
 darkenButton.addEventListener("click", () => {
     if (!isDarkenToggled) {
         isDarkenToggled = true;
-        isLightenToggled = false;
-        lightenButton.classList.remove("toggled");
-        darkenSquare();
-        // Additional logic for darken button here
+
+        if(isLightenToggled) {
+            isLightenToggled = false;
+            lightenButton.classList.remove("toggled");
+            removeLightenListeners();
+        }
+
+        addDarkenListeners();
     } else {
         isDarkenToggled = false;
-        // Handle untoggle behavior if needed
+        removeDarkenListeners(); //Remove click listeners for darkening when toggled off
     }
     darkenButton.classList.toggle("toggled", isDarkenToggled);
 });
@@ -166,45 +170,74 @@ darkenButton.addEventListener("click", () => {
 lightenButton.addEventListener("click", () => {
     if (!isLightenToggled) {
         isLightenToggled = true;
-        isDarkenToggled = false;
-        darkenButton.classList.remove("toggled");
-        lightenSquare();
-        // Additional logic for lighten button here
+
+        if(isDarkenToggled) {
+            isDarkenToggled = false;
+            darkenButton.classList.remove("toggled");
+            removeDarkenListeners();
+        }
+
+        addLightenListeners();
     } else {
         isLightenToggled = false;
-        // Handle untoggle behavior if needed
+        removeLightenListeners(); //Remove click listeners for lightening when toggled off
     }
     lightenButton.classList.toggle("toggled", isLightenToggled);
 });
 
-function darkenSquare() {
+function addDarkenListeners() {
     let boxesArray = Array.from(allBoxes);
     boxesArray.forEach((div) => {
-        div.addEventListener("click", () => {
-            const currentColor = getComputedStyle(div).backgroundColor;
-            const rgbArray = currentColor.match(/\d+/g);
-            
-            // Calculate 10% of black to add to each color channel
-            const increaseBy = Math.floor(25.5); // 10% of 255
-            const newColor = `rgb(${rgbArray[0] - increaseBy}, ${rgbArray[1] - increaseBy}, ${rgbArray[2] - increaseBy})`;
-            
-            div.style.backgroundColor = newColor;
-        })
+        div.addEventListener("click", darkenSquare);
     });
 }
 
-function lightenSquare() {
+function removeDarkenListeners() {
     let boxesArray = Array.from(allBoxes);
     boxesArray.forEach((div) => {
-        div.addEventListener("click", () => {
-            const currentColor = getComputedStyle(div).backgroundColor;
-            const rgbArray = currentColor.match(/\d+/g);
-            
-            // Calculate 10% of white to add to each color channel
-            const decreaseBy = Math.floor(25.5); // 10% of 255
-            const newColor = `rgb(${Math.min(rgbArray[0] + decreaseBy, 255)}, ${Math.min(rgbArray[1] + decreaseBy, 255)}, ${Math.min(rgbArray[2] + decreaseBy, 255)})`;
-            
-            div.style.backgroundColor = newColor;
-        })
+        div.removeEventListener("click", darkenSquare);
     });
+}
+
+function addLightenListeners() {
+    let boxesArray = Array.from(allBoxes);
+    boxesArray.forEach((div) => {
+        div.addEventListener("click", lightenSquare);
+    });
+}
+
+function removeLightenListeners() {
+    let boxesArray = Array.from(allBoxes);
+    boxesArray.forEach((div) => {
+        div.removeEventListener("click", lightenSquare);
+    });
+}
+
+function darkenSquare() {
+    const currentColor = getComputedStyle(this).backgroundColor;
+    const rgbArray = currentColor.match(/\d+/g);
+    
+    // Calculate 10% of black to add to each color channel
+    const increaseBy = Math.floor(25.5); // 10% of 255
+    const newColor = `rgb(${rgbArray[0] - increaseBy}, ${rgbArray[1] - increaseBy}, ${rgbArray[2] - increaseBy})`;
+    
+    this.style.backgroundColor = newColor;
+}
+
+function lightenSquare() {
+    let currentColor = getComputedStyle(this).backgroundColor;
+    currentColor = currentColor.substring(4, currentColor.length - 1).replace(/ /g, '').split(',');
+    let r = parseInt(currentColor[0]);
+    let g = parseInt(currentColor[1]);
+    let b = parseInt(currentColor[2]);
+
+    // Calculate the increase in each color channel to achieve 10% lighter color
+    let increaseBy = Math.floor(0.1 * (255 - r));
+
+    // Calculate the new color
+    r = Math.min(r + increaseBy, 255);
+    g = Math.min(g + increaseBy, 255);
+    b = Math.min(b + increaseBy, 255);
+
+    this.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
 }
