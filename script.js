@@ -5,6 +5,7 @@ let allBoxes = document.getElementsByClassName("grid-box");
 
 //Current color
 let currentColor = "black"; //default
+let currentBackgroundColor = "white" //default
 
 
 //Startup
@@ -78,6 +79,22 @@ const buttons = document.querySelectorAll('.option');
 //     });
 // });
 
+
+/*Select pen color*/
+let pen = document.getElementById("pen");
+
+pen.addEventListener("input", () => {
+    let penColor = pen.value;
+    currentColor = penColor;
+})
+
+/*Select background color*/
+let background = document.getElementById("background");
+
+background.addEventListener("input", () => {
+    let backgroundColorValue = background.value;
+    gridContainer.style.backgroundColor = backgroundColorValue;
+})
 
 /*Extra: random colors*/
 const randomColorsButton = document.getElementById("random");
