@@ -63,24 +63,7 @@ function changeBoxColor(){
 }
 
 
-//Button
-const buttons = document.querySelectorAll('.option');
-
-// buttons.forEach(element => {
-//     //Initialize isToggled property for each button
-//     element.isToggled = false;
-
-//     element.addEventListener('click', function() {
-//         // Toggle the isToggled property for the clicked button
-//         this.isToggled = !this.isToggled;
-        
-//         // Toggle the 'toggled' class based on the isToggled property
-//         this.classList.toggle('toggled', this.isToggled);
-//     });
-// });
-
-
-/*Select pen color*/
+//Select pen color
 let pen = document.getElementById("pen");
 
 pen.addEventListener("input", () => {
@@ -88,13 +71,14 @@ pen.addEventListener("input", () => {
     currentColor = penColor;
 })
 
-/*Select background color*/
+//Select background color
 let background = document.getElementById("background");
 
 background.addEventListener("input", () => {
     let backgroundColorValue = background.value;
     gridContainer.style.backgroundColor = backgroundColorValue;
 })
+
 
 /*Extra: random colors*/
 const randomColorsButton = document.getElementById("random");
@@ -143,7 +127,7 @@ function resetColors() {
 }
 
 
-// Darken and lighten buttons
+//Darken and lighten buttons
 const darkenButton = document.getElementById("darken");
 const lightenButton = document.getElementById("lighten");
 let isDarkenToggled = false;
