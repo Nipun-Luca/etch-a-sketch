@@ -52,23 +52,35 @@ slider.addEventListener("input", function() {
 
 
 //Hovering and changing colors of box
-function changeBoxColor(){
+let hovered = false;
+function changeBoxColor() {
     let boxesArray = Array.from(allBoxes);
 
-    boxesArray.forEach(function(box) {
-        box.addEventListener("mouseover", function() {
+    boxesArray.forEach(function (box) {
+        box.addEventListener("mousedown", function () {
             box.style.backgroundColor = currentColor;
+            hovered = true;
+        });
+
+        box.addEventListener("mouseover", () => {
+            if (hovered) {
+                box.style.backgroundColor = currentColor;
+            }
+        });
+
+        box.addEventListener("mouseup", () => {
+            hovered = false;
         });
     });
 }
+
 
 
 //Select pen color
 let pen = document.getElementById("pen");
 
 pen.addEventListener("input", () => {
-    let penColor = pen.value;
-    currentColor = penColor;
+    currentColor = pen.value;
 })
 
 //Select background color
