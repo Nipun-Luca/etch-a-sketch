@@ -3,9 +3,13 @@ let gridValue = slider.value;
 let gridContainer = document.getElementById("container");
 let allBoxes = document.getElementsByClassName("grid-box");
 
+
+
 //Current color
 let currentColor = "black"; //default
 let currentBackgroundColor = "white" //default
+
+
 
 
 //Startup
@@ -35,6 +39,9 @@ function removeGrid() {
 }
 
 
+
+
+
 //Slider
 let grid_size_display = document.getElementById("grid-size");
 grid_size_display.textContent = `${gridValue} x ${gridValue}`;
@@ -50,6 +57,9 @@ slider.addEventListener("input", function() {
         changeBoxColor();
     }
 })
+
+
+
 
 
 //Hovering and changing colors of box
@@ -77,6 +87,8 @@ function changeBoxColor() {
 
 
 
+
+
 //Select pen color
 let pen = document.getElementById("pen");
 
@@ -84,13 +96,21 @@ pen.addEventListener("input", () => {
     currentColor = pen.value;
 })
 
+
+
+
+
 //Select background color
 let background = document.getElementById("background");
+gridContainer.style.backgroundColor = currentBackgroundColor;
 
 background.addEventListener("input", () => {
     let backgroundColorValue = background.value;
     gridContainer.style.backgroundColor = backgroundColorValue;
 })
+
+
+
 
 
 //Extra: random colors
@@ -153,6 +173,8 @@ function resetColors() {
         div.style.backgroundColor = ''; // Reset to default background color
     });
 }
+
+
 
 
 //Darken and lighten buttons
@@ -255,4 +277,43 @@ function lightenSquare() {
 }
 
 
+
+
 //Eraser
+const eraserButton = document.getElementById("eraser");
+let isEraserToggled = false;
+let eraserColor = gridContainer.style.backgroundColor;
+
+eraserButton.addEventListener("click", () => {
+    isEraserToggled = !isEraserToggled;
+    if (isEraserToggled) {
+        eraserButton.classList.toggle("toggled", isEraserToggled);
+        applyEraser()
+    } else {
+        eraserButton.classList.toggle("toggled", isEraserToggled);
+    }
+})
+
+function applyEraser() {
+    let boxesArray = Array.from(allBoxes);
+    boxesArray.forEach((div) => {
+        div.addEventListener("mousedown", () => {
+            div.style.removeProperty("background-color");
+        });
+        div.addEventListener("mouseover", () => {
+            div.style.removeProperty("background-color");
+        });
+    })
+}
+
+function removeEraser() {
+    let boxesArray = Array.from(allBoxes);
+    boxesArray.forEach((div) => {
+        div.removeEventListener("mousedown", () => {
+            div.style.removeProperty("background-color");
+        });
+        div.removeEventListener("mouseover", () => {
+            div.style.removeProperty("background-color");
+        });
+    })
+}
