@@ -50,9 +50,16 @@ slider.addEventListener("input", function() {
     grid_size_display.textContent = `${gridValue} x ${gridValue}`;
     removeGrid()
     createGrid();
-    if(randomEnabled) {
+    if(randomEnabled && isEraserToggled) {
         changeBoxColor();
         applyRandomColors();
+        applyEraser();
+    } else if (randomEnabled) {
+        changeBoxColor();
+        applyRandomColors();
+    } else if (isEraserToggled) {
+        changeBoxColor();
+        applyEraser();
     } else {
         changeBoxColor();
     }
@@ -282,7 +289,7 @@ function lightenSquare() {
 //Eraser
 const eraserButton = document.getElementById("eraser");
 let isEraserToggled = false;
-let eraserColor = gridContainer.style.backgroundColor;
+let eraserHovered = false;
 
 eraserButton.addEventListener("click", () => {
     isEraserToggled = !isEraserToggled;
@@ -291,29 +298,40 @@ eraserButton.addEventListener("click", () => {
         applyEraser()
     } else {
         eraserButton.classList.toggle("toggled", isEraserToggled);
+        removeEraser();
     }
 })
 
 function applyEraser() {
     let boxesArray = Array.from(allBoxes);
+
     boxesArray.forEach((div) => {
-        div.addEventListener("mousedown", () => {
-            div.style.removeProperty("background-color");
-        });
-        div.addEventListener("mouseover", () => {
-            div.style.removeProperty("background-color");
-        });
-    })
+        div.addEventListener("mousedown", eraseBackground);
+        div.addEventListener("mouseover", eraseBackgroundOnHover);
+        div.addEventListener("mouseup", stopErasing);
+    });
+}
+
+function eraseBackground() {
+    this.style.removeProperty("background-color");
+    eraserHovered = true;
+}
+
+function eraseBackgroundOnHover() {
+    if (eraserHovered) {
+        this.style.removeProperty("background-color");
+    }
+}
+
+function stopErasing() {
+    eraserHovered = false;
 }
 
 function removeEraser() {
     let boxesArray = Array.from(allBoxes);
     boxesArray.forEach((div) => {
-        div.removeEventListener("mousedown", () => {
-            div.style.removeProperty("background-color");
-        });
-        div.removeEventListener("mouseover", () => {
-            div.style.removeProperty("background-color");
-        });
-    })
+        div.removeEventListener("mousedown", eraseBackground);
+        div.removeEventListener("mouseover", eraseBackgroundOnHover);
+        div.removeEventListener("mouseup", stopErasing);
+    });
 }
