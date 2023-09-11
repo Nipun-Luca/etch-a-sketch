@@ -44,6 +44,7 @@ slider.addEventListener("input", function() {
     removeGrid()
     createGrid();
     if(randomEnabled) {
+        changeBoxColor();
         applyRandomColors();
     } else {
         changeBoxColor();
@@ -92,37 +93,52 @@ background.addEventListener("input", () => {
 })
 
 
-/*Extra: random colors*/
+//Extra: random colors
 const randomColorsButton = document.getElementById("random");
 let randomEnabled = false;
+let tempCurrentColor = currentColor;
 
 randomColorsButton.addEventListener("click", () => {
     randomEnabled = !randomEnabled;
-    randomColorsButton.classList.toggle('toggled', this.isToggled);
+    randomColorsButton.classList.toggle('toggled', randomEnabled);
     if (randomEnabled) {
+        //When enabling random colors, store the current color
+        tempCurrentColor = currentColor;
         applyRandomColors();
     } else {
-        randomEnabled = false;
-        changeBoxColor();
+        randomColorsButton.classList.remove('toggled');
+        currentColor = tempCurrentColor; //Restore the previous color
+        removeRandomColoring();
     }
 });
 
 function applyRandomColors() {
     let boxesArray = Array.from(allBoxes);
     boxesArray.forEach((div) => {
-        // Generate a random color and apply it as the background color
-        const randomColor = getRandomColor();
-        div.addEventListener('mouseover', () => {
-            div.style.backgroundColor = randomColor;
-        });
+        div.addEventListener('mousedown', setRandomColor);
+        div.addEventListener('mouseover', setRandomColor);
+    });
+}
+
+function setRandomColor() {
+    currentColor = getRandomColor();
+}
+
+function removeRandomColoring() {
+    let boxesArray = Array.from(allBoxes);
+    boxesArray.forEach((div) => {
+        div.removeEventListener('mousedown', setRandomColor);
+        div.removeEventListener('mouseover', setRandomColor);
     });
 }
 
 function getRandomColor() {
     // Generate a random color in hex format (#RRGGBB)
-    const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16);
+    const randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
     return randomColor;
 }
+
+
 
 
 
@@ -237,3 +253,6 @@ function lightenSquare() {
 
     this.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
 }
+
+
+//Eraser

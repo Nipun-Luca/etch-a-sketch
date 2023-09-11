@@ -100,8 +100,8 @@ button {
     font: inherit;
     border: none;
     padding: .4rem 1rem;
-    background-color: #C8C2AA; /* Default background color */
-    color: #4D493E; /* Default text color */
+    background-color: #C8C2AA;
+    color: #4D493E;
     box-sizing: content-box;
     position: relative;
     border: 1px solid transparent;
