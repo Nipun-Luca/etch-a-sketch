@@ -255,8 +255,9 @@ function removeLightenListeners() {
 }
 
 function darkenSquare() {
-    const currentColor = getComputedStyle(this).backgroundColor;
-    const rgbArray = currentColor.match(/\d+/g);
+    const boxColor = getComputedStyle(this).backgroundColor;
+    console.log(boxColor)
+    const rgbArray = boxColor.match(/\d+/g);
     
     // Calculate 10% of black to add to each color channel
     const increaseBy = Math.floor(25.5); // 10% of 255
@@ -266,11 +267,11 @@ function darkenSquare() {
 }
 
 function lightenSquare() {
-    let currentColor = getComputedStyle(this).backgroundColor;
-    currentColor = currentColor.substring(4, currentColor.length - 1).replace(/ /g, '').split(',');
-    let r = parseInt(currentColor[0]);
-    let g = parseInt(currentColor[1]);
-    let b = parseInt(currentColor[2]);
+    let boxColor = getComputedStyle(this).backgroundColor;
+    boxColor = boxColor.substring(4, boxColor.length - 1).replace(/ /g, '').split(',');
+    let r = parseInt(boxColor[0]);
+    let g = parseInt(boxColor[1]);
+    let b = parseInt(boxColor[2]);
 
     // Calculate the increase in each color channel to achieve 10% lighter color
     let increaseBy = Math.floor(0.1 * (255 - r));
